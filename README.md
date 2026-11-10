@@ -1,77 +1,94 @@
 # Daybook
 
-A calm, private planner you can shape yourself. Tasks, a focus timer, habits, job search and learning in one place, with plug-ins for the tools you already use.
+A free, private home screen for your day. Your Notion tasks and calendar in one calm place, laid out the way you want, with a little companion who notices when you get things done.
 
-- **Private by default.** Everything is stored in your browser. No account, no tracking, no server. Nothing leaves your device unless you connect a plug-in.
-- **Yours to shape.** Reorder, rename or hide any tile on Home. Add your own counters and habits. Pick an accent colour and density.
-- **Plug-in based.** Each connection returns tasks or events in one standard shape, so every tab works with every source. Writing a new plug-in is one file.
-- **Works offline.** Installable as an app on desktop and phone.
+- **Free and private.** No account, no tracking, no server holding your data. Everything is stored in your browser.
+- **Bring what you use.** Notion (beta), calendar files and links, and Obsidian (optional), each as a small plug-in.
+- **Make it yours.** Reorder, rename or hide any tile. Add your own counters and habits. Pick an accent colour, light or dark.
+- **Page.** A pixel companion who changes colour and outfit with your day and cheers when you finish things. Hide it any time.
+- **Works offline.** Install it like an app on desktop and phone.
 - **No build step.** Plain HTML, CSS and JavaScript. Open it, read it, change it.
 
-## What is in it
+## How people get it
+
+The code lives on GitHub, but you do not need GitHub to use Daybook. Once the site is published (see below), people open a link, try the sample day, and install it from the browser. There is nothing to download and no command to run.
+
+| Address | What it is |
+|---|---|
+| `/` | The landing page |
+| `/app/` | The app itself |
+
+## What is in the app
 
 | Area | What it does |
 |---|---|
-| Home | A dashboard: your day, next event, focus timer, job search, learning and habits. Customisable. |
+| Home | A dashboard: your day, next event, focus timer and what needs you. Fully customisable. |
 | Today, Upcoming, Anytime | Tasks and events by day, repeating tasks (end a task with "daily"), prep reminders for meetings. |
-| Focus | Pomodoro timer with sound and notifications, and a history of your sessions. |
-| Habits | Your own habits: daily or a few times a week, an optional time window with reminders, a reason, and a link. |
-| Job search | Applications, interviews, follow-up reminders and a funnel. Optional. |
-| Learning | Courses with lesson days, study tasks and progress. Rename it to "Piano" or "Spanish". Optional. |
-| Page | The mascot. It changes colour and outfit with your day. Can be hidden. |
+| Focus | Pomodoro timer with sound and notifications. |
+| Habits | Your own: daily or a few times a week, an optional time window with reminders, a reason and a link. |
+| Starter layouts | Notion planner, Calendar and focus, Second brain, Just today. Chosen on first run. |
+| Job search, Learning | Optional modules, off by default. Turn them on in Settings. |
 
 ## Plug-ins
 
 | Plug-in | Status | Provides |
 |---|---|---|
-| Obsidian | Included | Tasks from your notes, tick-offs written back. Chrome and Edge for read and write, read-only elsewhere. |
-| Calendar files and links (ICS) | Included | Events from any `.ics` file or link: Google, Outlook, Apple. Recurring events and time zones supported. |
-| Notion | Planned | Tasks from your own Notion databases. |
-| Google Calendar, Outlook Calendar | Planned | Events with sign-in. |
-| Todoist | Planned | Tasks and projects. |
+| Notion | Beta | Tasks from a database you choose, with columns you match. Tick off and add from Daybook. Needs the small helper in `worker/`. |
+| Calendar files and links (ICS) | Included | Events from any `.ics` file or link: Google, Outlook, Apple. Recurring events and time zones work. |
+| Obsidian | Included, optional | Tasks from your notes, tick-offs written back. Chrome and Edge for read and write, read-only elsewhere. |
+| Google Calendar, Outlook Calendar, Todoist | Planned | |
 
-Want to add one? See [docs/PLUGINS.md](docs/PLUGINS.md).
+A plug-in is one JavaScript file. See [docs/PLUGINS.md](docs/PLUGINS.md).
 
-## Run it
+### About the Notion helper
 
-There is nothing to install. Serve the folder with any static server:
+Notion does not allow web pages to call its API, and its sign-in needs a secret that cannot sit in a web page. So Notion tasks pass through a small helper (a free Cloudflare Worker) that you can run yourself. It stores nothing and logs nothing. Set it up with [worker/README.md](worker/README.md). Daybook works fully without it; only the Notion plug-in needs it.
+
+## Run it locally
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open <http://localhost:8000>. Opening `index.html` directly from disk also works for most features, but the service worker and some browser APIs need `http://` or `https://`.
+Open <http://localhost:8000> for the landing page, or <http://localhost:8000/app/> for the app.
 
-## Deploy to GitHub Pages
+## Publish it
 
 1. Push this repository to GitHub.
 2. In the repository, go to Settings, Pages, and set Source to **GitHub Actions**.
-3. The included workflow in `.github/workflows/pages.yml` publishes the site on every push to `main`.
+3. The workflow in `.github/workflows/pages.yml` publishes the site on every push to `main`. Your address will be `https://yourname.github.io/repository-name/`.
+4. In `js/landing.js`, set `REPO_URL` to your repository so the footer link appears.
+5. For Notion, follow [worker/README.md](worker/README.md) and fill in `js/config.js`.
 
 ## Your data
 
-Data lives in your browser's local storage and IndexedDB for this site. Use **Settings, Your data** to export a backup or import one on another device. Clearing site data erases your Daybook, so export a backup now and then.
+Data lives in your browser's local storage and IndexedDB for this site. Use **Settings, Your data** to export a backup or import one on another device. There is no sync between devices yet. Clearing site data erases your Daybook, so export a backup now and then.
 
-Daybook makes no network requests of its own. It uses system fonts. A plug-in only talks to a service when you connect it, and a calendar link is fetched directly by your browser.
+Daybook makes no network requests of its own and uses system fonts. A plug-in only talks to a service when you connect it.
 
 ## Project layout
 
 ```
-index.html            page shell
-css/app.css           all styles
+index.html            landing page
+app/index.html        the app
+css/landing.css       landing page styles
+css/app.css           app styles
 js/store.js           the local document store
-js/app.js             the app: views, data layer, mascot, settings
+js/mascot.js          Page, drawn as SVG (shared by the app and the landing page)
+js/config.js          site configuration (Notion helper address)
+js/app.js             the app: views, data layer, settings, starters
+js/landing.js         landing page demo
 js/plugins/           one file per plug-in
+worker/               the optional Notion helper (Cloudflare Worker)
 sw.js, manifest.webmanifest, icons/   installable app files
 docs/PLUGINS.md       plug-in guide
 ```
 
 ## Roadmap
 
-- Notion, Google Calendar, Outlook and Todoist plug-ins, with sign-in through a small optional helper
-- Optional AI features using your own API key (interview debriefs, ask your day)
-- Plug-in settings for custom task sources and webhooks
-- Unlockable hats for Page
+- Google Calendar and Outlook sign-in plug-ins
+- Optional sync through a file or folder you already sync (iCloud, Dropbox, Drive)
+- More plug-ins from the community
 
 ## Contributing
 

@@ -1,8 +1,8 @@
 {
   "name": "Daybook",
   "short_name": "Daybook",
-  "description": "A calm, private planner: tasks, focus timer, habits, job search and learning.",
-  "start_url": "./",
+  "description": "A free, private home screen for your day.",
+  "start_url": "./app/",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",

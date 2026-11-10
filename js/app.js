@@ -15,8 +15,8 @@ const APPLY_GOAL=()=>Number(S.ui.applyGoal)||2;
 const BUILTIN=["day","next","focus","job","learn","habits","att"];
 const BNAMES={day:"Your day",next:"Next up",focus:"Focus",job:"Job search",learn:"Learning",habits:"Habits",att:"Needs attention"};
 const ACCENTS={blue:["#2f4fc4","#e8ecfa","#8ea4ff","#252b45"],teal:["#0f766e","#dff3f0","#5fd3c4","#173a36"],violet:["#6247c9","#efeafc","#b3a0ff","#2e2650"],rose:["#be3f6c","#fbe8f1","#f08cb8","#3a2232"],orange:["#b4561c","#fdeee3","#f0a36b","#3b2a1d"],green:["#2f7d4a","#e6f4ea","#6cc58a","#1f3326"]};
-function defUI(){return {order:BUILTIN.slice(),hidden:[],names:{},custom:[],accent:"blue",density:"cozy",addTo:"local",plugins:{},habits:[],modules:{job:true,learn:true},applyGoal:2,mascot:{on:true,colour:"status"}}}
-function mergeUI(u){const d=defUI();if(!u||typeof u!=="object")return d;const o=Object.assign(d,u);o.plugins=u.plugins&&typeof u.plugins==='object'?u.plugins:{};o.habits=Array.isArray(u.habits)?u.habits:[];o.modules=Object.assign({job:true,learn:true},u.modules||{});o.mascot=Object.assign({on:true,colour:"status"},u.mascot||{});o.names=u.names&&typeof u.names==="object"?u.names:{};o.custom=Array.isArray(u.custom)?u.custom:[];o.hidden=Array.isArray(u.hidden)?u.hidden:[];o.order=Array.isArray(u.order)?u.order:d.order;return o}
+function defUI(){return {order:BUILTIN.slice(),hidden:[],names:{},custom:[],accent:"blue",density:"cozy",addTo:"local",plugins:{},habits:[],modules:{job:false,learn:false},applyGoal:2,mascot:{on:true,colour:"status"}}}
+function mergeUI(u){const d=defUI();if(!u||typeof u!=="object")return d;const o=Object.assign(d,u);o.plugins=u.plugins&&typeof u.plugins==='object'?u.plugins:{};o.habits=Array.isArray(u.habits)?u.habits:[];o.modules=Object.assign({job:false,learn:false},u.modules||{});o.mascot=Object.assign({on:true,colour:"status"},u.mascot||{});o.names=u.names&&typeof u.names==="object"?u.names:{};o.custom=Array.isArray(u.custom)?u.custom:[];o.hidden=Array.isArray(u.hidden)?u.hidden:[];o.order=Array.isArray(u.order)?u.order:d.order;return o}
 function loadUI(){try{return mergeUI(JSON.parse(localStorage.getItem("daybook_ui")||"null"))}catch(_){return defUI()}}
 const tn=(id,def)=>(S.ui&&S.ui.names&&S.ui.names[id])||def;
 function applyUI(){
@@ -213,7 +213,7 @@ function exportBackup(){
 }
 
 /* ---------- sample data ---------- */
-async function seedDemo(){
+async function seedDemo(keep){
   const t=today(),d=n=>addDays(t,n),db=S.db,P=[];
   const put=(col,id,v)=>P.push(db.doc(col+"/"+id).set(Object.assign({demo:true},v)));
   const T=(name,date,o)=>put("tasks",uid("t"),Object.assign({name,type:"Task",company:"",notes:"",date,time:"",endTime:"",done:false,priority:false,removed:false,src:"Daybook"},o||{}));
@@ -222,12 +222,6 @@ async function seedDemo(){
   put("recurring",uid("r"),{name:"Review your inbox",area:"job",start:d(-14),end:null,createdAt:1});
   const ev=(title,date,time,endTime,o)=>put("events",uid("e"),Object.assign({title,date,time,endTime,allDay:false,url:"",join:"",meeting:false,src:"Sample"},o||{}));
   ev("Team standup",d(0),"09:30","09:45",{meeting:true,join:"https://meet.example.com"});ev("Product review",d(1),"15:00","16:00",{meeting:true});ev("Dentist",d(3),"11:00","11:45");
-  const A=(company,title,status,off)=>put("apps",uid("a"),{company,title,status,date:d(off),url:"",tier:"",warm:false});
-  A("Acme","Product marketing manager","Interview",-9);A("Globex","Product marketer","Applied",-12);A("Initech","Growth marketing lead","Applied",-2);A("Umbrella","Brand manager","Rejected",-20);
-  put("ivs",uid("i"),{name:"Acme: hiring manager call",date:d(1),time:"14:00",phase:"",status:"",url:""});
-  put("courses",uid("c"),{course:"Spanish A2",start:d(-14),end:d(70),days:[2,4],time:"18:00"});
-  put("study",uid("s"),{name:"Chapter 3 exercises",course:"Spanish A2",type:"Homework",due:d(-1),minutes:30,notes:"",done:false});
-  put("study",uid("s"),{name:"Learn 20 new words",course:"Spanish A2",type:"Vocabulary",due:d(2),minutes:20,notes:"",done:false});
   for(let i=1;i<=5;i++){const n=i%3+1;for(let k=0;k<n;k++)put("pomodoros",uid("p"),{date:d(-i),at:Date.now()-i*86400000+k*1800000,taskId:"free",title:"Free focus",minutes:25})}
   put("pomodoros",uid("p"),{date:d(0),at:Date.now()-3600000,taskId:"free",title:"Free focus",minutes:25});
   const hs=[{id:"hdemo1",name:"Read 10 pages",mode:"daily",goal:3,from:"",to:"",why:"A little every day adds up",link:"",linkLabel:"",demo:true},
@@ -236,13 +230,13 @@ async function seedDemo(){
   for(let i=1;i<=4;i++)put("habits","hdemo1_"+d(-i),{type:"hdemo1",date:d(-i)});
   put("habits","hdemo2_"+d(-2),{type:"hdemo2",date:d(-2)});
   await Promise.all(P);
-  localStorage.setItem("daybook_seen","1");S.firstRun=false;render();toast("Sample data loaded");
+  if(!keep){localStorage.setItem("daybook_seen","1");S.firstRun=false;render();toast("Sample data loaded")}else render();
 }
-async function clearDemo(){
+async function clearDemo(silent){
   const P=[];
   Object.keys(S.db.data).forEach(col=>Object.keys(S.db.data[col]).forEach(id=>{if(S.db.data[col][id]&&S.db.data[col][id].demo)P.push(S.db.doc(col+"/"+id).delete())}));
   S.ui.habits=S.ui.habits.filter(h=>!h.demo);saveUI();
-  await Promise.all(P);render();toast("Sample data removed");
+  await Promise.all(P);render();if(!silent)toast("Sample data removed");
 }
 const hasDemo=()=>Object.keys(S.db.data).some(col=>Object.keys(S.db.data[col]).some(id=>S.db.data[col][id]&&S.db.data[col][id].demo))||S.ui.habits.some(h=>h.demo);
 
@@ -306,7 +300,7 @@ async function finishFocus(){
   const rec={date:today(),at:Date.now(),taskId:T.taskId,title:T.title,minutes:Math.round(T.len/60)};
   S.timer={phase:"done",taskId:T.taskId,title:T.title,len:S.settings.brk*60,left:S.settings.brk*60,endsAt:null};saveTimer();
   if(!S.pomos.some(p=>p.at===rec.at))S.pomos.push({id,...rec});
-  chime("focus");notify("Pomodoro done","Nice work on "+T.title+". Time for a "+S.settings.brk+" minute break.");document.title="Pomodoro done";render();
+  chime("focus");notify("Pomodoro done","Nice work on "+T.title+". Time for a "+S.settings.brk+" minute break.");document.title="Pomodoro done";render();sayReaction("Focus session done. Take a short break.",{m:"done",hat:"phones",eyes:"happy"});
   if(S.db){try{await S.db.doc("pomodoros/"+id).set(rec)}catch(_){toast("Couldn't save this pomodoro. It shows until you reload.")}}
   finishing=false;
 }
@@ -585,7 +579,7 @@ function rowHTML(o){
 }
 function schedRow(e,d){
   const late=e.date<d&&!e.done;
-  const meta=(e.type==="Personal"?"Personal":e.type==="Task"?(e.src&&e.src!=="Daybook"?e.src+" task":"Task"):e.type)+(e.company?", "+e.company:"")+(e.time?", "+e.time:"")+(late?", from "+relDay(e.date):"");
+  const meta=(e.type==="Personal"?"Personal":e.type==="Task"?(e.src&&e.src!=="Daybook"?e.src+" task":"Task"):e.type)+(e.company?", "+e.company:"")+(e.time?", "+e.time:"")+(late?", from "+relDay(e.date):"")+(e.demo?", sample":"");
   return rowHTML({id:e.id,focusId:"s_"+e.id,act:"sched",title:e.name,meta,icon:e.type==="Personal"?"home":"task",url:e.url,done:e.done,flag:e.priority,late});
 }
 function statusLine(){
@@ -840,7 +834,7 @@ function viewLearn(){
 const hDone=(k,d)=>!!S.habits[k+"_"+(d||today())];
 async function setHabit(k,on,d){
   d=d||today();const id=k+"_"+d;
-  if(on)S.habits[id]={type:k,date:d,at:Date.now()};else delete S.habits[id];render();
+  if(on)S.habits[id]={type:k,date:d,at:Date.now()};else delete S.habits[id];render();if(on&&k.slice(-4)!=="skip")setTimeout(()=>habitReaction(k),30);
   try{const ref=S.db.doc("habits/"+id);if(on)await ref.set({type:k,date:d,at:Date.now()});else await ref.delete()}catch(_){toast("Couldn't save that. Try again.")}
 }
 function weekStart(d){const x=parse(d),w=(x.getDay()+6)%7;return addDays(d,-w)}
@@ -1007,7 +1001,7 @@ function viewHome(){
   const ws=weekStart(t);
   const week='<div class="week" role="group" aria-label="This week">'+[0,1,2,3,4,5,6].map(i=>{const d=addDays(ws,i),n=Math.min(4,dayLoad(d));
     return '<button type="button" class="wk'+(d===t?" t":"")+'" data-act="homeday" data-v="'+d+'" aria-label="'+esc(fmtDay(d))+', '+n+' planned">'+esc(dow(d).slice(0,3))+'<b>'+parse(d).getDate()+'</b><span class="dt">'+Array.from({length:n},()=>"<i></i>").join("")+'</span></button>'}).join("")+'</div>';
-  const hero='<header class="hhead"><div class="hgrp">'+pgHero+'<div><p class="eyebrow">'+esc(fmtDay(t))+'</p><h1>'+greeting()+'</h1><p class="hsum">'+esc(homeSummary(dp,ne))+'</p></div></div>'+
+  const hero='<header class="hhead"><div class="hgrp">'+pgHero+'<div><p class="eyebrow">'+esc(fmtDay(t))+'</p><h1>'+greeting()+'</h1><p class="hsum">'+esc(homeSummary(dp,ne))+'</p>'+(pgOn?'<p class="nudge">'+esc(mascotNudge(ms,dp))+'</p>':"")+'</div></div>'+
     '<div class="qadd"><label class="sr" for="addInput">Add a task</label>'+ic("plus",18,2)+'<input id="addInput" type="text" placeholder="Add a task" autocomplete="off"><button type="button" data-act="homeadd" aria-label="Add task">'+ic("up",16,2.4)+'</button></div></header>';
   const shown=items.slice(0,5);
   const rows=shown.map(x=>'<div class="hr'+(x.done?" done":"")+'"><button class="chk" aria-pressed="'+x.done+'" aria-label="'+(x.done?"Mark not done: ":"Mark done: ")+esc(x.t)+'" data-act="'+x.act+'" data-id="'+esc(x.id)+'"><span>'+ic("check",12,3.2)+'</span></button><span class="ht">'+esc(x.t)+'</span>'+(x.m?'<span class="hm">'+esc(x.m)+'</span>':"")+'</div>').join("");
@@ -1139,7 +1133,7 @@ function viewSettings(){
     return crow(esc(p.name),(p.provides||[]).map(esc),esc(p.desc||""),dot(st.state)+esc(st.text||""),body)}).join("");
   const planned=(n,k,d)=>crow(n,[k,"Planned"],d,dot("")+"Coming soon","");
   const plug='<section><h2>Plug-ins</h2><p class="note" style="margin-bottom:6px">Each connection is a small plug-in. Anyone can write one, see docs/PLUGINS.md.</p>'+pl+
-    planned("Notion","Tasks","Your own Notion databases, with sign-in.")+planned("Google Calendar","Events","Your events, with join links.")+planned("Outlook Calendar","Events","Microsoft 365 and Outlook events.")+planned("Todoist","Tasks","Tasks and projects from Todoist.")+'</section>';
+    planned("Google Calendar","Events","Your events, with join links.")+planned("Outlook Calendar","Events","Microsoft 365 and Outlook events.")+planned("Todoist","Tasks","Tasks and projects from Todoist.")+'</section>';
   const dests=[["local","Daybook"]].concat(Daybook.plugins.filter(p=>p.addTask).map(p=>[p.id,p.name]));
   const dp=plugin(u.addTo);
   const dest='<section><h2>New tasks</h2><p class="note" style="margin-bottom:10px">Where the quick-add field on Home and Today saves new tasks.</p>'+seg("addto",u.addTo,dests)+
@@ -1152,58 +1146,11 @@ function viewSettings(){
   return '<div class="col"><header><h1>Settings</h1><p class="sub">Make Daybook yours: looks, modules, habits and connections.</p></header>'+app+msec+mod+habs+plug+dest+data+about+
     '<section><h2>Home tiles</h2><p class="note">Reorder, rename, hide or add your own counters from Home with the Customize button.</p><div style="margin-top:10px"><button type="button" class="pill sm" data-act="go-customize">Customize Home</button></div></section></div>';
 }
-/* ---------- Page, the mascot ---------- */
-const PAGE_COL={pending:["#EF9F27","#BA7517"],overdue:["#E24B4A","#A32D2D"],done:["#639922","#3B6D11"],focus:["#7F77DD","#534AB7"],night:["#3C3489","#26215C"]};
-function hexRGB(h){h=h.replace("#","");return [0,2,4].map(i=>parseInt(h.substr(i,2),16))}
-function shade(h,f){return "#"+hexRGB(h).map(v=>("0"+Math.round(v*f).toString(16)).slice(-2)).join("")}
-function lumOf(h){const c=hexRGB(h).map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)});return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]}
-const PR=l=>l.map(x=>'<rect x="'+(x[0]-1)+'" y="'+(x[1]-1)+'" width="'+(x[2]+2)+'" height="'+(x[3]+2)+'" fill="#2C2C2A"/>').join("")+l.map(x=>'<rect x="'+x[0]+'" y="'+x[1]+'" width="'+x[2]+'" height="'+x[3]+'" fill="'+x[4]+'"/>').join("");
-const PRF=(x,y,w,h,f)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'"/>';
-const PAGE_HATS={
-  beanie:[[24,18,48,12,"#FAEEDA"],[22,26,52,6,"#D3D1C7"],[42,10,12,10,"#FFFFFF"]],
-  party:[[44,0,8,6,"#FAC775"],[44,6,8,6,"#D4537E"],[40,12,16,6,"#FBEAF0"],[36,18,24,6,"#D4537E"],[32,24,32,6,"#FBEAF0"]],
-  phones:[[24,22,62,5,"#444441"],[20,27,5,26,"#444441"],[85,27,5,26,"#444441"],[12,50,12,18,"#2C2C2A"],[86,50,12,18,"#2C2C2A"]],
-  night:[[26,18,44,10,"#AFA9EC"],[66,12,12,8,"#AFA9EC"],[74,8,8,8,"#AFA9EC"],[78,2,10,10,"#EEEDFE"]],
-  grad:[[22,20,66,6,"#444441"],[38,26,34,8,"#5F5E5A"],[84,20,4,18,"#EF9F27"],[82,36,8,5,"#EF9F27"]],
-  crown:[[34,16,6,12,"#EF9F27"],[46,10,6,18,"#EF9F27"],[58,16,6,12,"#EF9F27"],[34,24,36,6,"#FAC775"]]
-};
+/* ---------- Page, the mascot (drawing lives in js/mascot.js) ---------- */
 function pageSVG(o,size,cls){
-  o=o||{};size=size||96;
-  const acc=(ACCENTS[S.ui.accent]||ACCENTS.blue)[0];
-  let b=acc,d=shade(acc,0.72);
-  if(!o.logo&&S.ui.mascot.colour==="status"&&PAGE_COL[o.m]){b=PAGE_COL[o.m][0];d=PAGE_COL[o.m][1]}
-  const e=lumOf(b)<0.18?"#FFFFFF":"#1a1a1a";
-  let g=PR([[76,16,8,20,"#FAEEDA"],[76,32,8,4,"#D3D1C7"]]);
-  g+=PRF(20,28,70,66,b)+PRF(20,28,10,66,d);
-  if(o.hat!=="phones")g+=PRF(10,56,10,10,d)+PRF(90,56,10,10,d);
-  g+=PRF(34,94,12,10,d)+PRF(64,94,12,10,d);
-  if(o.hat&&PAGE_HATS[o.hat])g+=PR(PAGE_HATS[o.hat]);
-  const E=(x,y,w,h)=>PRF(x,y,w,h,e);
-  if(o.eyes==="happy")g+=[42,66].map(x=>E(x,54,4,4)+E(x+3,50,4,4)+E(x+7,54,4,4)).join("");
-  else if(o.eyes==="sleep")g+=E(42,56,10,3)+E(66,56,10,3);
-  else if(o.eyes==="focus")g+='<g class="eyes">'+E(42,50,10,10)+E(66,50,10,10)+'</g>'+E(40,44,14,3)+E(64,44,14,3);
-  else if(o.eyes==="worry")g+='<g class="eyes">'+E(42,52,10,10)+E(66,52,10,10)+'</g>'+E(40,48,6,3)+E(46,45,8,3)+E(64,45,8,3)+E(72,48,6,3);
-  else g+='<g class="eyes">'+E(42,50,10,10)+E(66,50,10,10)+'</g>';
-  if(o.mouth==="grin")g+=E(48,66,22,8);
-  else if(o.mouth==="worry")g+=E(52,72,14,3)+E(48,75,4,3)+E(66,75,4,3);
-  else if(o.mouth==="flat")g+=E(52,72,14,3);
-  else if(o.mouth==="sleep")g+=E(54,70,10,3);
-  else g+=E(50,70,18,4)+E(46,67,4,4)+E(68,67,4,4);
-  if(o.tie)g+=PR([[50,84,8,8,"#D4537E"],[40,82,10,12,"#D4537E"],[58,82,10,12,"#D4537E"]]);
-  if(o.drop)g+=PRF(82,40,5,8,"#85B7EB");
-  if(o.conf)g+=PRF(4,30,5,5,"#D4537E")+PRF(104,24,5,5,"#378ADD")+PRF(98,6,5,5,"#EF9F27")+PRF(8,8,5,5,"#1D9E75")+PRF(108,60,5,5,"#D4537E")+PRF(2,70,5,5,"#EF9F27");
-  if(o.zz)g+='<text x="94" y="22" font-size="14" fill="currentColor" opacity=".6">z</text><text x="104" y="10" font-size="10" fill="currentColor" opacity=".6">z</text>';
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 112" width="'+size+'" height="'+Math.round(size*112/120)+'"'+(cls?' class="'+cls+'"':"")+' aria-hidden="true">'+g+'</svg>';
+  return DaybookMascot.page(o,size,cls,{accent:(ACCENTS[S.ui.accent]||ACCENTS.blue)[0],status:S.ui.mascot.colour==="status"});
 }
-
-/* ---------- the logo: Page in a cowboy hat ---------- */
-function logoSVG(size){
-  size=size||34;const b="#FFD60A",d="#C79A00",e="#1a1a1a";
-  let g=PR([[80,116,8,12,"#FAEEDA"]])+PRF(20,50,70,66,b)+PRF(20,50,10,66,d)+PRF(10,78,10,10,d)+PRF(90,78,10,10,d)+PRF(34,116,12,10,d)+PRF(64,116,12,10,d);
-  g+=PRF(42,72,10,10,e)+PRF(66,72,10,10,e)+PRF(50,92,18,4,e)+PRF(46,89,4,4,e)+PRF(68,89,4,4,e)+PRF(34,88,6,4,"#FF9EC4")+PRF(80,88,6,4,"#FF9EC4");
-  g+=PR([[38,24,34,20,"#B8763A"],[48,20,14,4,"#B8763A"],[38,38,34,5,"#FF2D95"],[6,43,98,7,"#8B5A2B"],[2,38,10,6,"#8B5A2B"],[98,38,10,6,"#8B5A2B"]]);
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 128" width="'+size+'" height="'+Math.round(size*128/120)+'" aria-hidden="true">'+g+'</svg>';
-}
+function logoSVG(size){return DaybookMascot.logo(size)}
 const PAGE_STATES=[
   {k:"idle",label:"Idle",desc:"Nothing planned yet",o:{m:"idle",hat:"beanie"}},
   {k:"pending",label:"Pending",desc:"Tasks to do today",o:{m:"pending",hat:"beanie"}},
@@ -1219,9 +1166,9 @@ function mascotState(){
   const over=S.sched.some(e=>TASK_TYPES.includes(e.type)&&!e.removed&&!e.done&&e.date&&e.date<t)||studyOpen().some(x=>x.due&&x.due<t);
   let m="idle";
   if(T&&T.phase==="focus"&&T.endsAt)m="focus";
+  else if(dp.total>0&&!dp.left)m="done";
   else if(h>=22||h<5)m="night";
   else if(over)m="overdue";
-  else if(dp.total>0&&!dp.left)m="done";
   else if(dp.left>0)m="pending";
   const nl=nextLesson(),learn=S.view==="learn"||!!(nl&&nl.date===t);
   const iv=upcomingInterviews().some(u=>u.date===t);
@@ -1237,22 +1184,94 @@ function mascotState(){
   const say={idle:"Page is relaxed",pending:"Page is ready for your tasks",overdue:"Page is worried about overdue tasks",done:"Page is celebrating a finished day",focus:"Page is focusing with headphones",night:"Page is sleepy"}[m];
   return {m,o,say};
 }
+
+/* ---------- reactions and nudges ---------- */
+function mascotNudge(ms,dp){
+  const h=new Date().getHours(),t=today();
+  if(S.firstRun)return "Hi, I'm Page. Tick something to see what I do.";
+  if(ms.m==="focus")return "Focus mode is on. I'll stay quiet.";
+  if(ms.m==="done")return "Day complete. Nicely done.";
+  if(ms.m==="night")return "It's late. Time to rest.";
+  if(ms.m==="overdue"){const n=S.sched.filter(e=>TASK_TYPES.includes(e.type)&&!e.removed&&!e.done&&e.date&&e.date<t).length;return n?n+" late. Start with the oldest.":"Something is late. Have a look below."}
+  if(ms.m==="pending"){
+    if(dp.left===1)return "One left. Finish strong.";
+    if(dp.done===0&&h>=11)return "Nothing ticked yet. Pick the smallest one.";
+    return dp.done?dp.done+" done, "+dp.left+" to go.":"Start with whatever feels easiest.";
+  }
+  return "A clear page. Add something above.";
+}
+let reactT=null;
+function confetti(){
+  const cols=["#FF2D95","#FFD60A","#22D3EE","#8B5CF6","#2EE6A8","#FF7A1A"];
+  for(let i=0;i<28;i++){
+    const c=document.createElement("i");c.className="confetti";
+    c.style.left=(Math.random()*100)+"vw";c.style.background=cols[i%cols.length];
+    c.style.animationDelay=(Math.random()*0.5)+"s";c.style.animationDuration=(1.3+Math.random()*1.2)+"s";
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3400);
+  }
+}
+function sayReaction(msg,o,big){
+  if(!S.ui.mascot.on)return;
+  let el=document.getElementById("react");
+  if(!el){el=document.createElement("div");el.id="react";el.className="react";el.setAttribute("role","status");document.body.appendChild(el)}
+  el.classList.remove("on");
+  el.innerHTML='<span class="bub2">'+esc(msg)+'</span><span class="pgr">'+pageSVG(o,64)+'</span>';
+  void el.offsetWidth;el.classList.add("on");
+  clearTimeout(reactT);reactT=setTimeout(()=>el.classList.remove("on"),big?4600:3000);
+  if(big&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))confetti();
+}
+function afterTick(before){
+  if(!S.ui.mascot.on)return;
+  const dp=dayProgress();if(dp.left>=before)return;
+  if(dp.total>0&&dp.left===0){sayReaction("Day complete. Nicely done.",{m:"done",hat:"party",eyes:"happy",mouth:"grin",conf:1},true);return}
+  const msg=dp.left===1?"Last one. You've got this.":dp.done===1?"First one down. "+dp.left+" to go.":["Nice.","Done.","Keep going."][dp.done%3]+" "+dp.left+" to go.";
+  sayReaction(msg,{m:"done",hat:"beanie",eyes:"happy"});
+}
+function habitReaction(k){
+  if(!S.ui.mascot.on)return;
+  const h=S.ui.habits.find(x=>x.id===k);if(!h)return;
+  const st=habitStreak(h),unit=habitUnit(h),big=[7,14,30,50,100].indexOf(st)>=0;
+  sayReaction(big?h.name+": "+st+" "+unit+"s in a row!":st>1?h.name+" done. "+st+" "+unit+"s in a row.":h.name+" done.",
+    big?{m:"done",hat:"crown",eyes:"happy"}:{m:"done",hat:"beanie",eyes:"happy"},big);
+}
 function mascotSettings(seg){
   const mc=S.ui.mascot;
   return '<section><h2>Mascot</h2><div class="stack" style="gap:16px"><div class="fld">Page on Home'+seg("mascot-on",mc.on?"1":"0",[["1","Show"],["0","Hide"]])+'</div>'+
     '<div class="fld">Colour'+seg("mascot-col",mc.colour,[["status","Changes with my day"],["accent","Always my accent"]])+'</div>'+
     '<div class="fld">How Page reacts<div class="pgrid">'+PAGE_STATES.map(x=>'<div class="pgc">'+pageSVG(x.o,84)+'<b>'+x.label+'</b>'+x.desc+'</div>').join("")+'</div></div>'+
-    '<p class="note" style="font-size:13px">Colour is never the only signal: the face and hat change too. The first matching rule wins, in this order: focusing, night, overdue, done, pending.</p></div></section>';
+    '<p class="note" style="font-size:13px">Colour is never the only signal: the face and hat change too. The first matching rule wins, in this order: focusing, done, night, overdue, pending.</p></div></section>';
 }
 
 
+const STARTERS=[
+  {id:"notion",name:"Notion planner",desc:"Your Notion tasks, with today front and centre.",order:["day","next","att","focus","habits"],hide:[],density:"cozy",next:"plugins"},
+  {id:"calendar",name:"Calendar and focus",desc:"Your events, your tasks and a focus timer.",order:["next","day","focus","habits","att"],hide:[],density:"cozy",next:"plugins"},
+  {id:"second",name:"Second brain",desc:"Notion and Obsidian together: tasks and notes in one place.",order:["day","att","next","focus","habits"],hide:[],density:"cozy",next:"plugins"},
+  {id:"today",name:"Just today",desc:"Only your day, what is next and a timer.",order:["day","next","focus"],hide:["att","habits"],density:"compact",next:null}
+];
+async function applyStarter(id){
+  const st=STARTERS.find(s=>s.id===id);if(!st)return;
+  await clearDemo(true);
+  const rest=BUILTIN.filter(x=>st.order.indexOf(x)<0);
+  S.ui.order=st.order.concat(rest);
+  S.ui.hidden=st.hide.filter(x=>BUILTIN.indexOf(x)>=0);
+  S.ui.density=st.density;S.ui.starter=id;
+  saveUI();applyUI();
+  try{localStorage.setItem("daybook_seen","1")}catch(_){}
+  S.firstRun=false;
+  if(st.next==="plugins"){
+    S._vAnim=true;S.view="settings";render();
+    const h=[...document.querySelectorAll(".col h2")].find(x=>x.textContent==="Plug-ins");if(h)h.scrollIntoView({block:"start"});
+    toast("Layout set. Connect your tools below.");
+  }else{S.view="home";render();window.scrollTo(0,0);toast("Layout set. Add your first task.")}
+}
 function welcomeHTML(){
   if(!S.firstRun)return "";
+  const cards=STARTERS.map(s=>'<button type="button" class="starter" data-act="starter" data-id="'+s.id+'"><b>'+esc(s.name)+'</b><span>'+esc(s.desc)+'</span></button>').join("");
   return '<section class="tile" aria-label="Welcome"><div class="tl"><span class="chp c-blue">'+ic("spark",16,1.9)+'</span><span>Welcome to Daybook</span></div>'+
-    '<p class="mid">Your day, your way.</p><p class="tsub">Tasks, a focus timer, habits, job search and learning in one calm place. Everything stays in this browser. Connect Obsidian or a calendar file in Settings whenever you like.</p>'+
-    '<div class="btns" style="flex-wrap:wrap"><button class="pill pri sm" data-act="demo-load">Explore with sample data</button><button class="pill sm" data-act="demo-skip">Start empty</button></div></section>';
+    '<p class="mid">This is a sample day. Tick something and watch Page.</p><p class="tsub">Pick a starting layout when you are ready. You can change everything later, and your own data replaces the sample.</p>'+
+    '<div class="starters">'+cards+'</div><div class="btns"><button class="pill sm" data-act="demo-skip">Start empty</button></div></section>';
 }
-
 /* ---------- main render ---------- */
 const VIEWS={home:["Home","home",viewHome],today:["Today","sun",viewToday],upcoming:["Upcoming","cal",viewUpcoming],anytime:["Anytime","list",viewAnytime],focus:["Focus","timer",viewFocus],pipeline:["Job search","chart",viewPipeline],learn:["Learning","book",viewLearn],settings:["Settings","gear",viewSettings]};
 function themeBtn(){
@@ -1293,10 +1312,10 @@ document.addEventListener("click",e=>{
   if(a==="view"){S._vAnim=S.view!==el.dataset.v;S.view=el.dataset.v;if(S.view==="today")S.day=null;render();window.scrollTo(0,0)}
   else if(a==="day"){S.day=el.dataset.v===today()?null:el.dataset.v;render()}
   else if(a==="pickdate"){const i=$("#dayPick");if(i){try{i.showPicker()}catch(_){i.focus()}}}
-  else if(a==="sched"){S._hop=Date.now();toggleSched(id)}
+  else if(a==="sched"){S._hop=Date.now();const b=dayProgress().left;toggleSched(id);afterTick(b)}
   else if(a==="learn")toggleStudy(id);
-  else if(a==="recur"){S._hop=Date.now();const [rid,d]=id.split("|");toggleRecur(rid,d)}
-  else if(a==="auto"){S._hop=Date.now();markAuto(id,!S.autodone[id])}
+  else if(a==="recur"){S._hop=Date.now();const b=dayProgress().left;const [rid,d]=id.split("|");toggleRecur(rid,d);afterTick(b)}
+  else if(a==="auto"){S._hop=Date.now();const b=dayProgress().left;markAuto(id,!S.autodone[id]);afterTick(b)}
   else if(a==="focus")startFocus(id,el.dataset.title);
   else if(a==="startfree"){unlockAudio();const first=document.querySelector('.play');if(first)startFocus(first.dataset.id,first.dataset.title);else startFocus("free","Free focus")}
   else if(a==="pause")pause();
@@ -1346,7 +1365,8 @@ document.addEventListener("click",e=>{
   else if(a==="h-save")habitSave();
   else if(a==="h-del")habitDelete();
   else if(a==="demo-load")seedDemo();
-  else if(a==="demo-skip"){try{localStorage.setItem("daybook_seen","1")}catch(_){}S.firstRun=false;render()}
+  else if(a==="demo-skip"){clearDemo(true).then(()=>{try{localStorage.setItem("daybook_seen","1")}catch(_){}S.firstRun=false;render()})}
+  else if(a==="starter")applyStarter(id);
   else if(a==="demo-clear")clearDemo();
   else if(a==="data-export")exportBackup();
   else if(a==="data-wipe"){if(S._wipe){S._wipe=false;S.db.clearAll();S.ui=defUI();saveUI();applyUI();toast("All data erased");render()}else{S._wipe=true;render();setTimeout(()=>{if(S._wipe){S._wipe=false;render()}},5000)}}
@@ -1415,12 +1435,13 @@ function boot(){
   S.db.onError=()=>toast("Browser storage is full. Export a backup in Settings.");
   const empty=!Object.keys(S.db.data).some(c=>Object.keys(S.db.data[c]).length);
   let seen=false;try{seen=!!localStorage.getItem("daybook_seen")}catch(_){}
-  S.firstRun=empty&&!seen;
+  S.firstRun=!seen;
   applyTheme();applyUI();
   startData();
+  if(S.firstRun&&empty)seedDemo(true);
   Daybook.plugins.forEach(p=>{try{p.init&&p.init(API)}catch(err){console.error("plug-in "+p.id,err)}});
   render();armTimer();
-  try{if("serviceWorker" in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(()=>{})}catch(_){}
+  try{if("serviceWorker" in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register("../sw.js").catch(()=>{})}catch(_){}
 }
 if(document.readyState==="complete")boot();else window.addEventListener("load",boot);
 })();

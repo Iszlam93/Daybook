@@ -1,0 +1,8 @@
+name = "daybook-helper"
+main = "notion-helper.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+# Comma separated origins that may use the helper, for example "https://yourname.github.io".
+# Empty allows any origin, which is fine while testing and not recommended afterwards.
+ALLOWED_ORIGINS = ""

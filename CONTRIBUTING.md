@@ -8,11 +8,12 @@ Thanks for helping. Daybook is a small, dependency-free web app, so getting star
 python -m http.server 8000
 ```
 
-Open <http://localhost:8000>. There is no build step: edit a file and refresh.
+Open <http://localhost:8000> for the landing page and <http://localhost:8000/app/> for the app. There is no build step: edit a file and refresh.
 
 ## Where things live
 
 - `js/store.js` is the local document store. It mimics a tiny database (`collection`, `doc`, `onSnapshot`).
+- `js/mascot.js` draws Page. It is shared by the app and the landing page.
 - `js/app.js` holds the views, data layer and settings. It is one file on purpose for now; sections are marked with `/* ---------- name ---------- */` comments.
 - `js/plugins/` has one file per plug-in. See [docs/PLUGINS.md](docs/PLUGINS.md).
 - `css/app.css` has all styles, driven by CSS variables so light and dark mode both work.

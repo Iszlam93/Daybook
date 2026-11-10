@@ -391,3 +391,21 @@ main[data-v=ask]{--vc:var(--t-violet)}main[data-v=debrief]{--vc:var(--t-pink)}
 .daychk input:checked+span{background:var(--accent-soft);border-color:var(--accent);color:var(--ink);font-weight:500}
 .daychk input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
 .tag{margin-left:2px}
+
+/* ---------- reactions ---------- */
+.nudge{margin:6px 0 0;font-size:14px;font-weight:500;color:var(--accent)}
+.react{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:flex-end;gap:10px;pointer-events:none;opacity:0;transform:translateY(24px);transition:opacity .25s,transform .25s}
+.react.on{opacity:1;transform:none}
+.react .bub2{background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:15px;font-weight:500;max-width:260px;line-height:1.35}
+.react.on .pgr{display:block;line-height:0;animation:hop .6s ease-out}
+.confetti{position:fixed;top:-14px;width:9px;height:9px;z-index:41;pointer-events:none;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(108vh) rotate(540deg)}}
+@media (max-width:760px){.react{bottom:calc(84px + env(safe-area-inset-bottom,0px));right:12px}}
+@media (prefers-reduced-motion:reduce){.react,.react.on .pgr{transition:none;animation:none}}
+
+/* ---------- starter layouts ---------- */
+.starters{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.starter{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line2);background:var(--bg);border-radius:14px;padding:14px 16px;cursor:pointer;color:var(--ink);min-height:88px}
+.starter:hover{border-color:var(--accent);background:var(--accent-soft)}
+.starter b{font-size:15px;font-weight:600}
+.starter span{font-size:13px;color:var(--ink2);line-height:1.35}

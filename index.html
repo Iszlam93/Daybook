@@ -3,27 +3,167 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Daybook</title>
-<meta name="description" content="Daybook is a calm, private planner: tasks, focus timer, habits, job search and learning, with plug-ins for Obsidian and calendar files.">
+<title>Daybook: your day on one calm page</title>
+<meta name="description" content="Daybook brings your Notion tasks and calendar together, lets you arrange them your way, and keeps everything on your device. Free, no account.">
 <meta name="theme-color" content="#2f4fc4">
-<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:title" content="Daybook">
+<meta property="og:description" content="Your day, on one calm page. Free, private, no account.">
+<meta property="og:type" content="website">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
-<div class="app">
-  <nav class="side" aria-label="Main" id="side"></nav>
-  <main id="main" aria-live="polite"></main>
-</div>
-<div class="toast" id="toast" role="status"></div>
-<div class="alert" id="alert" role="alert" hidden></div>
-<div class="menu" id="menu" role="menu" hidden></div>
-<dialog class="card" id="card" aria-label="Details"></dialog>
-<noscript><p style="padding:24px;font-family:system-ui">Daybook needs JavaScript to run. Everything stays in your browser.</p></noscript>
-<script src="js/store.js"></script>
-<script src="js/app.js"></script>
-<script src="js/plugins/obsidian.js"></script>
-<script src="js/plugins/ics.js"></script>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="./" aria-label="Daybook home"><span id="logo" class="logo" aria-hidden="true"></span><span>Daybook</span></a>
+    <nav class="top-nav" aria-label="Page sections">
+      <a href="#connect">Connect</a>
+      <a href="#layouts">Layouts</a>
+      <a href="#page">Page</a>
+      <a href="#private">Private</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="app/">Open Daybook</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <p class="eyebrow">Free. No account. Works in your browser.</p>
+        <h1>Your day, on one calm page.</h1>
+        <p class="lead">Daybook brings your Notion tasks and calendar together, lets you arrange them your way, and keeps it all on your device.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="app/">Open Daybook</a>
+          <a class="btn btn-ghost" href="#connect">See how it works</a>
+        </div>
+        <p class="fine">Opens with a sample day, so you can look around before you connect anything.</p>
+      </div>
+
+      <div class="demo" aria-label="A small Daybook you can try">
+        <div class="demo-top">
+          <span class="demo-page" id="demoPage" aria-hidden="true"></span>
+          <p class="demo-say" id="demoSay" role="status">Tick something and watch Page.</p>
+        </div>
+        <div class="demo-card">
+          <div class="demo-h"><span>Your day</span><span id="demoCount">0 of 3</span></div>
+          <ul class="demo-list" id="demoList">
+            <li><button type="button" aria-pressed="false"><span class="chk" aria-hidden="true"></span>Reply to Sam about the proposal</button></li>
+            <li><button type="button" aria-pressed="false"><span class="chk" aria-hidden="true"></span>Plan the week</button></li>
+            <li><button type="button" aria-pressed="false"><span class="chk" aria-hidden="true"></span>Book the dentist</button></li>
+          </ul>
+          <button type="button" class="demo-reset" id="demoReset" hidden>Try again</button>
+        </div>
+        <p class="demo-note">This is a toy copy. The real thing reads your own tasks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="connect" class="sec">
+    <div class="wrap">
+      <h2>Bring what you already use</h2>
+      <p class="sec-lead">Daybook does not replace your tools. It reads from them and shows the day in one place. Each connection is a small plug-in.</p>
+      <div class="cards">
+        <article class="card">
+          <span class="status beta">Beta</span>
+          <h3>Notion</h3>
+          <p>Pick a database, match its columns, and see your tasks next to your calendar. Tick them off in Daybook and Notion updates.</p>
+        </article>
+        <article class="card">
+          <span class="status ok">Available</span>
+          <h3>Calendars</h3>
+          <p>Add a calendar file or link from Google, Outlook or Apple. Recurring events and time zones work. Sign-in for Google and Outlook is coming.</p>
+        </article>
+        <article class="card">
+          <span class="status opt">Optional</span>
+          <h3>Obsidian</h3>
+          <p>Show the tasks from your notes, and tick them off right in the note. Only if you choose to connect a vault.</p>
+        </article>
+        <article class="card">
+          <span class="status soon">Open source</span>
+          <h3>More, one file each</h3>
+          <p>A plug-in is a single JavaScript file. Write one for the tool you use and share it.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="layouts" class="sec alt">
+    <div class="wrap">
+      <h2>Make it yours</h2>
+      <p class="sec-lead">Start from a layout, then change anything. Reorder, rename or hide any tile. Add your own counters and habits. Pick an accent colour, and light or dark.</p>
+      <div class="layouts">
+        <article class="lay">
+          <div class="mini mini-a" aria-hidden="true"><i class="b day">Your day</i><i class="b next">Next up</i><i class="b att">Needs you</i></div>
+          <h3>Notion planner</h3><p>Your Notion tasks, with today front and centre.</p>
+        </article>
+        <article class="lay">
+          <div class="mini mini-b" aria-hidden="true"><i class="b next">Next up</i><i class="b day">Your day</i><i class="b focus">Focus</i></div>
+          <h3>Calendar and focus</h3><p>Your events, your tasks and a focus timer.</p>
+        </article>
+        <article class="lay">
+          <div class="mini mini-c" aria-hidden="true"><i class="b day">Your day</i><i class="b att">Needs you</i><i class="b next">Next up</i><i class="b focus">Focus</i></div>
+          <h3>Second brain</h3><p>Notion and Obsidian together, for tasks and notes.</p>
+        </article>
+        <article class="lay">
+          <div class="mini mini-d" aria-hidden="true"><i class="b day">Your day</i><i class="b next">Next up</i></div>
+          <h3>Just today</h3><p>Only your day and what is next. Nothing else.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="page" class="sec">
+    <div class="wrap">
+      <h2>Meet Page</h2>
+      <p class="sec-lead">A small companion who notices your day. Page changes colour and outfit as the day goes, and cheers when you finish things. Never nags, and you can hide Page in Settings.</p>
+      <ul class="moods" id="moods"></ul>
+    </div>
+  </section>
+
+  <section id="private" class="sec alt">
+    <div class="wrap">
+      <h2>Private by design</h2>
+      <div class="facts">
+        <div><h3>On your device</h3><p>Your tasks, habits and settings are stored in your browser. There is no server holding them.</p></div>
+        <div><h3>No account</h3><p>Open it and use it. There is nothing to sign up for and no tracking.</p></div>
+        <div><h3>Free and open</h3><p>Daybook is open source under the MIT licence. You can read every line.</p></div>
+      </div>
+      <p class="honest"><strong>Two honest notes.</strong> Notion does not let web pages talk to it directly, so Notion tasks pass through a small helper that you can run yourself. It stores nothing. And because your data lives in one browser, there is no sync between devices yet. You can export a backup and import it elsewhere.</p>
+    </div>
+  </section>
+
+  <section id="install" class="sec">
+    <div class="wrap">
+      <h2>Install it like an app</h2>
+      <ol class="steps">
+        <li><b>Open Daybook</b><span>No download, no app store.</span></li>
+        <li><b>Add it to your device</b><span>On a computer, use the install icon in the address bar of Chrome or Edge. On an iPhone, tap Share, then Add to Home Screen.</span></li>
+      </ol>
+      <p class="sec-lead">It then opens in its own window with its own icon, and it works offline.</p>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap final-in">
+      <span id="logoBig" class="logo-big" aria-hidden="true"></span>
+      <h2>Ready when you are</h2>
+      <a class="btn btn-primary" href="app/">Open Daybook</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span>Daybook is free and open source, under the MIT licence.</span>
+    <span id="ghWrap" hidden><a id="ghLink" href="#" rel="noopener">View the code on GitHub</a></span>
+  </div>
+</footer>
+
+<script src="js/mascot.js"></script>
+<script src="js/landing.js"></script>
 </body>
 </html>
