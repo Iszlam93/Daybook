@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daybook</title>
+<meta name="description" content="Daybook is a calm, private planner: tasks, focus timer, habits, job search and learning, with plug-ins for Obsidian and calendar files.">
+<meta name="theme-color" content="#2f4fc4">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app">
+  <nav class="side" aria-label="Main" id="side"></nav>
+  <main id="main" aria-live="polite"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="alert" id="alert" role="alert" hidden></div>
+<div class="menu" id="menu" role="menu" hidden></div>
+<dialog class="card" id="card" aria-label="Details"></dialog>
+<noscript><p style="padding:24px;font-family:system-ui">Daybook needs JavaScript to run. Everything stays in your browser.</p></noscript>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+<script src="js/plugins/obsidian.js"></script>
+<script src="js/plugins/ics.js"></script>
+</body>
+</html>
