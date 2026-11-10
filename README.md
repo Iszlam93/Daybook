@@ -9,6 +9,32 @@ A free, private home screen for your day. Your Notion tasks and calendar in one 
 - **Works offline.** Install it like an app on desktop and phone.
 - **No build step.** Plain HTML, CSS and JavaScript. Open it, read it, change it.
 
+## How to use Daybook
+
+You do not need to install anything or create an account.
+
+**1. Open it.** Go to the live site (the address is shown at the top of this repository once it is published) and choose **Open Daybook**. It opens with a sample day so you can look around. Tick a task and watch Page.
+
+**2. Pick a starting layout.** Choose Notion planner, Calendar and focus, Second brain or Just today. You can change everything later. Your own data replaces the sample.
+
+**3. Add your first tasks.** Type in the **Add a task** box on Home or Today. End a task with the word `daily` to make it repeat, for example `Stretch daily`.
+
+**4. Connect what you use** (optional), in **Settings, Plug-ins**:
+
+| To see | Do this |
+|---|---|
+| Calendar events | Choose **Upload .ics file**, or paste a calendar link. Export the file from Google Calendar (Settings, Import and export), Outlook (Publish calendar) or Apple Calendar (File, Export). |
+| Notion tasks | Needs the small helper, see [worker/README.md](worker/README.md). Then choose **Connect with Notion**, pick your tasks database and match its columns. |
+| Obsidian notes | Choose **Choose vault folder** in Chrome or Edge. Daybook reads your checkbox tasks and ticks them off in the note. |
+
+**5. Make it yours.** On Home choose **Customize Home** to reorder, rename or hide tiles and add your own counters. In **Settings** you can add habits, switch on Job search or Learning, and pick an accent colour, light or dark, and Page's behaviour.
+
+**6. Install it like an app.** On a computer, use the install icon in the address bar of Chrome or Edge. On an iPhone, tap Share, then Add to Home Screen. It then opens in its own window and works offline.
+
+**7. Back up your data.** Your data lives in this browser only. In **Settings, Your data** choose **Export backup** now and then. You can import it on another device.
+
+If you would rather run it on your own computer, see [Run it locally](#run-it-locally).
+
 ## How people get it
 
 The code lives on GitHub, but you do not need GitHub to use Daybook. Once the site is published (see below), people open a link, try the sample day, and install it from the browser. There is nothing to download and no command to run.
