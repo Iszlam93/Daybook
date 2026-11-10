@@ -81,8 +81,8 @@ Open <http://localhost:8000> for the landing page, or <http://localhost:8000/app
 ## Publish it
 
 1. Push this repository to GitHub.
-2. In the repository, go to Settings, Pages, and set Source to **GitHub Actions**.
-3. The workflow in `.github/workflows/pages.yml` publishes the site on every push to `main`. This repository is published at <https://iszlam93.github.io/Daybook/>. A copy of your own would be at `https://yourname.github.io/repository-name/`.
+2. In the repository, go to Settings, Pages. Under Build and deployment, set Source to **Deploy from a branch**, choose the branch `main` and the folder `/ (root)`, and save.
+3. The site updates automatically on every push to `main`. This repository is published at <https://iszlam93.github.io/Daybook/>. A copy of your own would be at `https://yourname.github.io/repository-name/`.
 4. In `js/landing.js`, set `REPO_URL` to your repository so the footer link appears.
 5. For Notion, follow [worker/README.md](worker/README.md) and fill in `js/config.js`.
 
