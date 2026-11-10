@@ -24,7 +24,7 @@ You do not need to install anything or create an account.
 | To see | Do this |
 |---|---|
 | Calendar events | Choose **Upload .ics file**, or paste a calendar link. Export the file from Google Calendar (Settings, Import and export), Outlook (Publish calendar) or Apple Calendar (File, Export). |
-| Notion tasks | Needs the small helper, see [worker/README.md](worker/README.md). Then choose **Connect with Notion**, pick your tasks database and match its columns. |
+| Notion tasks | Choose **Connect with Notion** and sign in, pick your tasks database and match its columns. |
 | Obsidian notes | Choose **Choose vault folder** in Chrome or Edge. Daybook reads your checkbox tasks and ticks them off in the note. |
 
 **5. Make it yours.** On Home choose **Customize Home** to reorder, rename or hide tiles and add your own counters. In **Settings** you can add habits, switch on Job search or Learning, and pick an accent colour, light or dark, and Page's behaviour.
@@ -59,7 +59,7 @@ The code lives on GitHub, but you do not need GitHub to use Daybook. Once the si
 
 | Plug-in | Status | Provides |
 |---|---|---|
-| Notion | Beta | Tasks from a database you choose, with columns you match. Tick off and add from Daybook. Needs the small helper in `worker/`. |
+| Notion | Beta | Tasks from a database you choose, with columns you match. Tick off and add from Daybook. Works on the public site through a small helper; see below. |
 | Calendar files and links (ICS) | Included | Events from any `.ics` file or link: Google, Outlook, Apple. Recurring events and time zones work. |
 | Obsidian | Included, optional | Tasks from your notes, tick-offs written back. Chrome and Edge for read and write, read-only elsewhere. |
 | Google Calendar, Outlook Calendar, Todoist | Planned | |
@@ -68,7 +68,7 @@ A plug-in is one JavaScript file. See [docs/PLUGINS.md](docs/PLUGINS.md).
 
 ### About the Notion helper
 
-Notion does not allow web pages to call its API, and its sign-in needs a secret that cannot sit in a web page. So Notion tasks pass through a small helper (a free Cloudflare Worker) that you can run yourself. It stores nothing and logs nothing. Set it up with [worker/README.md](worker/README.md). Daybook works fully without it; only the Notion plug-in needs it.
+Notion does not allow web pages to call its API, and its sign-in needs a secret that cannot sit in a web page. So Notion tasks pass through a small helper (a free Cloudflare Worker). The public site runs one for you; it stores nothing and logs nothing. If you host your own copy of Daybook, set up your own helper with [worker/README.md](worker/README.md). Daybook works fully without it; only the Notion plug-in needs it.
 
 ## Run it locally
 

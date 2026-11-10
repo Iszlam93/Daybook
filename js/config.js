@@ -5,7 +5,7 @@
  */
 window.DAYBOOK_CONFIG = {
   // URL of your deployed Notion helper, for example "https://daybook-helper.yourname.workers.dev"
-  helperUrl: "",
+  helperUrl: "https://daybook-helper.islam-elsaid.workers.dev",
   // The OAuth client ID of your Notion public integration (this is not a secret)
-  notionClientId: ""
+  notionClientId: "414d872b-594c-81e1-ba72-003764227b69"
 };
