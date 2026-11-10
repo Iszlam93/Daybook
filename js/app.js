@@ -1215,9 +1215,9 @@ function sayReaction(msg,o,big){
   let el=document.getElementById("react");
   if(!el){el=document.createElement("div");el.id="react";el.className="react";el.setAttribute("role","status");document.body.appendChild(el)}
   el.classList.remove("on");
-  el.innerHTML='<span class="bub2">'+esc(msg)+'</span><span class="pgr">'+pageSVG(o,64)+'</span>';
+  el.innerHTML='<span class="bub2">'+esc(msg)+'</span><span class="pgr">'+pageSVG(o,88)+'</span>';
   void el.offsetWidth;el.classList.add("on");
-  clearTimeout(reactT);reactT=setTimeout(()=>el.classList.remove("on"),big?4600:3000);
+  clearTimeout(reactT);reactT=setTimeout(()=>el.classList.remove("on"),big?5200:4200);
   if(big&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))confetti();
 }
 function afterTick(before){

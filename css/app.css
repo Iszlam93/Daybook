@@ -281,6 +281,8 @@ dialog.card::backdrop{background:rgba(20,20,24,.35)}
   .brand,.navh,.sync{display:none}
   .nav{flex:none;flex-direction:column;justify-content:center;gap:2px;width:auto;min-width:62px;min-height:52px;padding:6px 8px;font-size:11px;white-space:nowrap;text-align:center}
   .nav .n{display:none}
+  .nav{flex:1 1 0;min-width:52px;padding:6px 4px}
+  .nav[data-act="theme"]{display:none}
   main{padding:28px 20px 110px}
   h1{font-size:28px}
   .clock{font-size:30px}
@@ -396,7 +398,7 @@ main[data-v=ask]{--vc:var(--t-violet)}main[data-v=debrief]{--vc:var(--t-pink)}
 .nudge{margin:6px 0 0;font-size:14px;font-weight:500;color:var(--accent)}
 .react{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:flex-end;gap:10px;pointer-events:none;opacity:0;transform:translateY(24px);transition:opacity .25s,transform .25s}
 .react.on{opacity:1;transform:none}
-.react .bub2{background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:15px;font-weight:500;max-width:260px;line-height:1.35}
+.react .bub2{background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:15px;font-weight:500;max-width:260px;line-height:1.35;box-shadow:0 6px 20px rgba(0,0,0,.18)}
 .react.on .pgr{display:block;line-height:0;animation:hop .6s ease-out}
 .confetti{position:fixed;top:-14px;width:9px;height:9px;z-index:41;pointer-events:none;animation:fall 1.8s ease-in forwards}
 @keyframes fall{to{transform:translateY(108vh) rotate(540deg)}}

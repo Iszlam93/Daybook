@@ -1,5 +1,5 @@
 /* Daybook service worker: caches the site so the app works offline. */
-const CACHE = "daybook-v0.2.0";
+const CACHE = "daybook-v0.2.1";
 const SHELL = [
   "./", "index.html", "app/", "app/index.html",
   "css/app.css", "css/landing.css",
