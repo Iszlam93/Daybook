@@ -13,7 +13,7 @@ A free, private home screen for your day. Your Notion tasks and calendar in one 
 
 You do not need to install anything or create an account.
 
-**1. Open it.** Go to the live site (the address is shown at the top of this repository once it is published) and choose **Open Daybook**. It opens with a sample day so you can look around. Tick a task and watch Page.
+**1. Open it.** Go to <https://iszlam93.github.io/Daybook/> and choose **Open Daybook**. It opens with a sample day so you can look around. Tick a task and watch Page.
 
 **2. Pick a starting layout.** Choose Notion planner, Calendar and focus, Second brain or Just today. You can change everything later. Your own data replaces the sample.
 
@@ -82,7 +82,7 @@ Open <http://localhost:8000> for the landing page, or <http://localhost:8000/app
 
 1. Push this repository to GitHub.
 2. In the repository, go to Settings, Pages, and set Source to **GitHub Actions**.
-3. The workflow in `.github/workflows/pages.yml` publishes the site on every push to `main`. Your address will be `https://yourname.github.io/repository-name/`.
+3. The workflow in `.github/workflows/pages.yml` publishes the site on every push to `main`. This repository is published at <https://iszlam93.github.io/Daybook/>. A copy of your own would be at `https://yourname.github.io/repository-name/`.
 4. In `js/landing.js`, set `REPO_URL` to your repository so the footer link appears.
 5. For Notion, follow [worker/README.md](worker/README.md) and fill in `js/config.js`.
 

@@ -5,7 +5,7 @@
   var ACCENT = "#2f4fc4";
   // Set this to the public repository address once it exists, for example
   // "https://github.com/yourname/daybook". While empty, the link stays hidden.
-  var REPO_URL = "";
+  var REPO_URL = "https://github.com/Iszlam93/Daybook";
 
   var page = function (o, size) { return M.page(o, size, "", { accent: ACCENT, status: true }); };
 
