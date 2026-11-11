@@ -255,7 +255,8 @@
 
   function settings(api) {
     var e = api.esc, c = cfg(), m = c.map || {}, html = "";
-    var note = '<p class="note" style="margin-top:8px;font-size:13px">Notion does not allow requests from web pages, so your Notion data passes through a small helper that you run yourself. It stores nothing. See <code>worker/README.md</code>.</p>';
+    var siteHelper = String(CFG().helperUrl || "").replace(/\/+$/, "");
+    var note = '<p class="note" style="margin-top:8px;font-size:13px">Notion does not allow requests from web pages, so your Notion data passes through a small helper. ' + (siteHelper && helper() === siteHelper ? 'This site runs one for you. It stores nothing and logs nothing.' : 'You run it yourself, and it stores nothing. See <code>worker/README.md</code>.') + '</p>';
     if (!ST.token) {
       if (oauthReady()) {
         html += '<div class="btns" style="margin-top:10px"><button type="button" class="pill sm pri" data-act="plug:notion:connect">Connect with Notion</button></div>';
@@ -275,7 +276,7 @@
       '<button type="button" class="smallbtn" data-act="plug:notion:reload">Reload databases</button><button type="button" class="smallbtn" data-act="plug:notion:disconnect">Disconnect</button></div>';
     if (ST.msg) html += '<p class="warnnote" style="margin-top:8px">' + e(ST.msg) + "</p>";
     if (!ST.dbs) { html += '<p class="note" style="margin-top:8px;font-size:13px">Loading your databases…</p>'; if (ST.token && !ST.loading) { ST.loading = true; loadDatabases().then(function () { ST.loading = false; }); } return html + note; }
-    if (!ST.dbs.length) return html + '<p class="warnnote" style="margin-top:8px">No databases are shared with Daybook. In Notion, open your tasks database, choose Connections, and add this integration. Then reload.</p>' + note;
+    if (!ST.dbs.length) return html + '<p class="warnnote" style="margin-top:8px">Daybook cannot see a database yet. Sharing a page that only shows a view of a database is not enough: share the database itself. The surest way is to choose Disconnect, connect again, and pick your tasks database in the list Notion shows. If you just added it in Notion, it can take a minute to show up here.</p>' + note;
     html += '<div class="frow" style="margin-top:12px"><label class="fld">Tasks database' +
       sel(e, "db", c.dbId || "", ST.dbs.map(function (d) { return { v: d.id, l: d.name }; }), "Choose a database…") + "</label></div>";
     if (c.dbId && ST.schema) {
