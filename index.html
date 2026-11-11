@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Daybook: your day on one calm page</title>
-<meta name="description" content="Daybook brings your Notion tasks and calendar together, lets you arrange them your way, and keeps everything on your device. Free, no account.">
+<meta name="description" content="Daybook puts your tasks, notes, calendar, habits and a Pomodoro timer in one place. It works with Notion, calendars, Obsidian and more, and keeps everything on your device. Free, no account.">
 <meta name="theme-color" content="#2f4fc4">
 <meta property="og:title" content="Daybook">
 <meta property="og:description" content="Your day, on one calm page. Free, private, no account.">
@@ -26,6 +26,7 @@
   <div class="wrap top-in">
     <a class="brand" href="./" aria-label="Daybook home"><span id="logo" class="logo" aria-hidden="true"></span><span>Daybook</span></a>
     <nav class="top-nav" aria-label="Page sections">
+      <a href="#see">See it</a>
       <a href="#connect">Connect</a>
       <a href="#layouts">Layouts</a>
       <a href="#page">Page</a>
@@ -41,7 +42,7 @@
       <div class="hero-copy">
         <p class="eyebrow">Free. No account. Works in your browser.</p>
         <h1>Your day, on one calm page.</h1>
-        <p class="lead">Daybook brings your Notion tasks and calendar together, lets you arrange them your way, and keeps it all on your device.</p>
+        <p class="lead">Your tasks, notes, calendar, habits and a Pomodoro timer in one place. Daybook pulls from Notion, your calendar, Obsidian and more, lets you arrange it your way, and keeps it all on your device.</p>
         <div class="cta">
           <a class="btn btn-primary" href="app/">Open Daybook</a>
           <a class="btn btn-ghost" href="#connect">See how it works</a>
@@ -55,7 +56,7 @@
           <p class="demo-say" id="demoSay" role="status">Tick something and watch Page.</p>
         </div>
         <div class="demo-card">
-          <div class="demo-h"><span>Your day</span><span id="demoCount">0 of 3</span></div>
+          <div class="tile-h t-day"><span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg></span><span>Your day</span><em id="demoCount">0 of 3</em></div>
           <ul class="demo-list" id="demoList">
             <li><button type="button" aria-pressed="false"><span class="chk" aria-hidden="true"></span>Reply to Sam about the proposal</button></li>
             <li><button type="button" aria-pressed="false"><span class="chk" aria-hidden="true"></span>Plan the week</button></li>
@@ -63,20 +64,69 @@
           </ul>
           <button type="button" class="demo-reset" id="demoReset" hidden>Try again</button>
         </div>
+        <div class="demo-mini">
+          <div class="tile t-next">
+            <div class="tile-h"><span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span><span>Next up</span><em>Calendar</em></div>
+            <p class="big">14:00</p>
+            <p class="sub">Design review</p>
+          </div>
+          <div class="tile t-hab">
+            <div class="tile-h"><span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/></svg></span><span>Habits</span><em id="habCount">1 of 3</em></div>
+            <div class="habs" id="habs">
+              <button type="button" aria-pressed="true"><i aria-hidden="true"></i>Water</button>
+              <button type="button" aria-pressed="false"><i aria-hidden="true"></i>Walk</button>
+              <button type="button" aria-pressed="false"><i aria-hidden="true"></i>Read</button>
+            </div>
+          </div>
+          <div class="tile t-focus">
+            <div class="tile-h"><span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M9.5 3h5"/></svg></span><span>Focus</span><em>Pomodoro</em></div>
+            <div class="ring-row">
+              <svg class="ring" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" class="ring-bg"/><circle cx="22" cy="22" r="18" class="ring-fg"/></svg>
+              <span class="ring-t" aria-hidden="true">25:00</span>
+              <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></span>
+            </div>
+            <p class="sub">Reply to Sam</p>
+          </div>
+          <div class="tile t-note">
+            <div class="tile-h"><span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5zM15 4v4h4M8 13h8M8 17h5"/></svg></span><span>Note</span><em>Obsidian</em></div>
+            <p class="sub">Ask Sam for the Q3 numbers before Friday.</p>
+          </div>
+        </div>
         <p class="demo-note">This is a toy copy. The real thing reads your own tasks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="see" class="sec alt">
+    <div class="wrap">
+      <h2>The real app, not a mock-up</h2>
+      <p class="sec-lead">A sample day in Daybook on a laptop and on a phone. When you connect your own tools, your own data replaces the sample.</p>
+      <div class="shots">
+        <figure class="shot-wide">
+          <picture>
+            <source srcset="img/app-home-dark.png" media="(prefers-color-scheme: dark)">
+            <img src="img/app-home-light.png" width="1200" height="900" loading="lazy" alt="Daybook on a laptop: a greeting from Page, the week, today's tasks, Next up, a Focus timer and Habits.">
+          </picture>
+        </figure>
+        <figure class="shot-phone">
+          <picture>
+            <source srcset="img/app-home-phone-dark.png" media="(prefers-color-scheme: dark)">
+            <img src="img/app-home-phone.png" width="585" height="1266" loading="lazy" alt="Daybook on a phone: the same day in one column with a tab bar at the bottom.">
+          </picture>
+        </figure>
       </div>
     </div>
   </section>
 
   <section id="connect" class="sec">
     <div class="wrap">
-      <h2>Bring what you already use</h2>
-      <p class="sec-lead">Daybook does not replace your tools. It reads from them and shows the day in one place. Each connection is a small plug-in.</p>
+      <h2>Everything for your day, in one place</h2>
+      <p class="sec-lead">Daybook does not replace your tools. It reads from them and shows the day in one place. Notion is one source among several.</p>
       <div class="cards">
         <article class="card">
           <span class="status beta">Beta</span>
           <h3>Notion</h3>
-          <p>Pick a database, match its columns, and see your tasks next to your calendar. Tick them off in Daybook and Notion updates.</p>
+          <p>Sign in with Notion, pick a database, match its columns, and see your tasks next to your calendar. Tick them off in Daybook and Notion updates.</p>
         </article>
         <article class="card">
           <span class="status ok">Available</span>
@@ -86,12 +136,17 @@
         <article class="card">
           <span class="status opt">Optional</span>
           <h3>Obsidian</h3>
-          <p>Show the tasks from your notes, and tick them off right in the note. Only if you choose to connect a vault.</p>
+          <p>Bring in your notes and the tasks inside them, and tick tasks off right in the note. Only if you choose to connect a vault.</p>
         </article>
         <article class="card">
-          <span class="status soon">Open source</span>
-          <h3>More, one file each</h3>
-          <p>A plug-in is a single JavaScript file. Write one for the tool you use and share it.</p>
+          <span class="status ok">Built in</span>
+          <h3>Habits</h3>
+          <p>Your own habits and streaks sit right on the day, with optional reminders. Nothing to connect.</p>
+        </article>
+        <article class="card">
+          <span class="status ok">Built in</span>
+          <h3>Pomodoro focus timer</h3>
+          <p>Pick a task and start a focus session with timed breaks. Page puts on headphones while you work and counts your finished pomodoros.</p>
         </article>
       </div>
     </div>
@@ -126,6 +181,10 @@
     <div class="wrap">
       <h2>Meet Page</h2>
       <p class="sec-lead">A small companion who notices your day. Page changes colour and outfit as the day goes, and cheers when you finish things. Never nags, and you can hide Page in Settings.</p>
+      <div class="loop" aria-label="Page reacting to a ticked task">
+        <span class="loop-page" id="loopPage" aria-hidden="true"></span>
+        <p class="loop-say" id="loopSay" aria-hidden="true">Ready</p>
+      </div>
       <ul class="moods" id="moods"></ul>
     </div>
   </section>
@@ -138,7 +197,7 @@
         <div><h3>No account</h3><p>Open it and use it. There is nothing to sign up for and no tracking.</p></div>
         <div><h3>Free and open</h3><p>Daybook is open source under the MIT licence. You can read every line.</p></div>
       </div>
-      <p class="honest"><strong>Two honest notes.</strong> Notion does not let web pages talk to it directly, so Notion tasks pass through a small helper that you can run yourself. It stores nothing. And because your data lives in one browser, there is no sync between devices yet. You can export a backup and import it elsewhere. The <a href="privacy/">privacy page</a> has the details.</p>
+      <p class="honest"><strong>Two honest notes.</strong> Notion does not let web pages talk to it directly, so Notion tasks pass through a small helper (a free Cloudflare Worker) that signs you in and forwards your requests. It stores and logs nothing, and you can run your own copy. Without Notion, nothing leaves your browser. And because your data lives in one browser, there is no sync between devices yet. You can export a backup and import it elsewhere. The <a href="privacy/">privacy page</a> has the details.</p>
     </div>
   </section>
 

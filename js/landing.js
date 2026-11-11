@@ -75,6 +75,39 @@
   });
   if (demoPage) update(false);
 
+  // Page loop: ready, someone ticks a task, Page cheers, then back again
+  var lp = document.getElementById("loopPage"), ls = document.getElementById("loopSay");
+  if (lp && ls) {
+    var steps = [
+      { t: "Ready. 3 to do.", o: { m: "pending", hat: "beanie" } },
+      { t: "Task ticked.", o: { m: "done", hat: "beanie", eyes: "happy" }, hop: 1 },
+      { t: "Day complete.", o: { m: "done", hat: "party", eyes: "happy", mouth: "grin", conf: 1 }, hop: 1 }
+    ], i = 0;
+    var show = function () {
+      var s = steps[i]; lp.innerHTML = page(s.o, 84); ls.textContent = s.t;
+      lp.classList.remove("hop"); if (s.hop && !reduced) { void lp.offsetWidth; lp.classList.add("hop"); }
+    };
+    show();
+    if (!reduced) setInterval(function () { i = (i + 1) % steps.length; show(); }, 2000);
+  }
+
+  // habit chips in the demo
+  var habs = document.getElementById("habs"), habCount = document.getElementById("habCount");
+  if (habs) {
+    var hb = Array.prototype.slice.call(habs.querySelectorAll("button"));
+    var habUpdate = function () {
+      habCount.textContent = hb.filter(function (b) { return b.getAttribute("aria-pressed") === "true"; }).length + " of " + hb.length;
+    };
+    hb.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var on = b.getAttribute("aria-pressed") === "true";
+        b.setAttribute("aria-pressed", on ? "false" : "true");
+        habUpdate();
+        if (!on) { say.textContent = "Habit kept. Page noticed."; demoPage.classList.remove("hop"); void demoPage.offsetWidth; demoPage.classList.add("hop"); }
+      });
+    });
+  }
+
   // repository link
   var wrap = document.getElementById("ghWrap"), a = document.getElementById("ghLink");
   if (REPO_URL && wrap && a) { a.href = REPO_URL; wrap.hidden = false; }
