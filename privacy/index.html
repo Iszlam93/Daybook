@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy: Daybook</title>
+<meta name="description" content="What Daybook stores, where it lives, and what passes through the Notion helper.">
+<meta name="theme-color" content="#2f4fc4">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/landing.css">
+<style>
+.doc{padding:clamp(40px,6vw,72px) 0 clamp(48px,7vw,88px)}
+.doc h1{font-size:clamp(32px,5vw,46px);margin-bottom:10px}
+.doc .upd{color:var(--ink3);font-size:15px;margin-bottom:28px}
+.doc h2{font-size:22px;margin:36px 0 10px;letter-spacing:-.015em}
+.doc p,.doc li{color:var(--ink2);max-width:44em}
+.doc p+p{margin-top:12px}
+.doc ul{margin:10px 0 0;padding-left:22px}
+.doc li{margin:6px 0}
+.doc strong{color:var(--ink)}
+.doc .box{margin-top:20px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:16px;max-width:44em}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="../" aria-label="Daybook home"><span>Daybook</span></a>
+    <nav class="top-nav" aria-label="Legal"><a href="./" aria-current="page">Privacy</a><a href="../terms/">Terms</a></nav>
+    <a class="btn btn-primary btn-sm" href="../app/">Open Daybook</a>
+  </div>
+</header>
+
+<main id="main" class="doc">
+  <div class="wrap">
+    <h1>Privacy</h1>
+    <p class="upd">Last updated 11 November 2026</p>
+
+    <p>Daybook is a planner that runs in your browser. This page says, in plain words, what it keeps, where, and who can see it.</p>
+
+    <h2>The short version</h2>
+    <ul>
+      <li>Your tasks, habits and settings stay in <strong>your browser</strong>. Daybook has no database and no accounts.</li>
+      <li>There is <strong>no tracking</strong>: no analytics, no advertising, no cookies set by Daybook.</li>
+      <li>Only if you connect <strong>Notion</strong> does anything pass through a server, and that server keeps none of your data.</li>
+    </ul>
+
+    <h2>What Daybook stores, and where</h2>
+    <p>Your tasks, habits, focus history, layout and settings are saved in your browser's own storage (local storage and IndexedDB) for this site. They never leave your device unless you connect a plug-in, and nobody else, including the people who made Daybook, can read them. Clearing your browser's site data erases them, so use <strong>Settings, Your data, Export backup</strong> now and then.</p>
+
+    <h2>Notion</h2>
+    <p>Notion does not let web pages talk to it directly, and its sign-in needs a secret that cannot sit in a web page. So Daybook uses a small helper that runs on Cloudflare Workers.</p>
+    <ul>
+      <li><strong>Signing in.</strong> You approve Daybook inside Notion and choose which pages and databases to share. The helper swaps the sign-in code for an access key and hands it straight to your browser, which keeps it. The helper does not keep it.</li>
+      <li><strong>Reading and updating tasks.</strong> When Daybook reads or changes a task, the request goes from your browser through the helper to Notion, and the answer comes back the same way. The helper passes it along and keeps nothing. Request logging for the helper is switched off.</li>
+      <li><strong>What it can do.</strong> The helper forwards only a short list of Notion actions: search, read a database, read its rows, create a task, update a task, and read your basic profile (no email address). Everything else is refused, and only this site may use it.</li>
+      <li><strong>What Daybook can reach.</strong> Only the pages and databases you share with it, with read, update and insert access. It never sees the rest of your workspace.</li>
+    </ul>
+    <div class="box"><strong>One honest note.</strong> Your Notion data does pass through Cloudflare's network on its way, as it does for any website that uses Cloudflare. Cloudflare may process technical details such as IP addresses under <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">its own privacy policy</a>. Daybook does not receive or store them.</div>
+
+    <h2>Calendars and Obsidian</h2>
+    <ul>
+      <li><strong>Calendar files and links.</strong> A file you upload is read in your browser. A link is fetched directly by your browser from the calendar's own host (Google, Outlook, Apple or another), so that host sees the request, just as it would if you opened the link yourself.</li>
+      <li><strong>Obsidian.</strong> If you choose a vault folder, Daybook reads and ticks checkbox tasks in those notes on your device. Nothing is uploaded.</li>
+    </ul>
+
+    <h2>The website itself</h2>
+    <p>This site is hosted on GitHub Pages. GitHub, as the host, may keep ordinary server records such as IP addresses and the pages requested, under <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">its own privacy statement</a>. Daybook adds no tracking on top.</p>
+
+    <h2>Your choices</h2>
+    <ul>
+      <li><strong>Disconnect Notion.</strong> In Daybook, Settings, Notion, choose Disconnect. This deletes the access key from your browser. To remove Daybook's access on Notion's side as well, go to Notion, Settings, Connections, and remove Daybook.</li>
+      <li><strong>Delete everything.</strong> Settings, Your data, Erase all data, or clear this site's data in your browser.</li>
+      <li><strong>Take it with you.</strong> Export a backup file at any time.</li>
+    </ul>
+
+    <h2>Changes and questions</h2>
+    <p>If this page changes, the date at the top changes too. Daybook is open source, so you can read exactly what it does. Questions or concerns: <a href="https://github.com/Iszlam93/Daybook/issues" rel="noopener">open an issue on GitHub</a>.</p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span>Daybook is free and open source, under the MIT licence.</span>
+    <span><a href="./">Privacy</a> · <a href="../terms/">Terms</a> · <a href="https://github.com/Iszlam93/Daybook" rel="noopener">GitHub</a></span>
+  </div>
+</footer>
+</body>
+</html>

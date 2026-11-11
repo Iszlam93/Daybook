@@ -1,11 +1,11 @@
 /* Daybook service worker: caches the site so the app works offline. */
-const CACHE = "daybook-v0.2.2";
+const CACHE = "daybook-v0.2.3";
 const SHELL = [
   "./", "index.html", "app/", "app/index.html",
   "css/app.css", "css/landing.css",
   "js/store.js", "js/mascot.js", "js/config.js", "js/app.js", "js/landing.js",
   "js/plugins/obsidian.js", "js/plugins/ics.js", "js/plugins/notion.js",
-  "manifest.webmanifest", "icons/favicon.svg", "icons/icon-192.png", "icons/icon-512.png"
+  "privacy/", "privacy/index.html", "terms/", "terms/index.html", "manifest.webmanifest", "icons/favicon.svg", "icons/icon-192.png", "icons/icon-512.png"
 ];
 
 self.addEventListener("install", (e) => {

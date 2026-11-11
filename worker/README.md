@@ -22,6 +22,7 @@ The helper solves both. **Your Notion data passes through it**, so run your own 
    wrangler deploy
    ```
 
+   Turn off request logging so the helper keeps nothing: in the Cloudflare dashboard, open the Worker, then Settings, and switch **Logs** off (Cloudflare turns it on for new Workers).
    In `wrangler.toml`, set `ALLOWED_ORIGINS` to your site, for example `https://yourname.github.io`.
 3. **Tell Daybook about it.** Edit `js/config.js`:
 

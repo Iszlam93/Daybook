@@ -43,6 +43,7 @@ The code lives on GitHub, but you do not need GitHub to use Daybook. Once the si
 |---|---|
 | `/` | The landing page |
 | `/app/` | The app itself |
+| `/privacy/`, `/terms/` | What Daybook stores, and the terms of use |
 
 ## What is in the app
 
@@ -104,6 +105,7 @@ js/mascot.js          Page, drawn as SVG (shared by the app and the landing page
 js/config.js          site configuration (Notion helper address)
 js/app.js             the app: views, data layer, settings, starters
 js/landing.js         landing page demo
+privacy/, terms/      the privacy and terms pages
 js/plugins/           one file per plug-in
 worker/               the optional Notion helper (Cloudflare Worker)
 sw.js, manifest.webmanifest, icons/   installable app files
